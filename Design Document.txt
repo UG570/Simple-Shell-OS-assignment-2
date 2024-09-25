@@ -1,0 +1,18 @@
+Limitations of SimpleShell:
+ 
+Built-in Shell Commands: Commands like cd, exit, etc, that are built into the shell (like bash or sh) cannot be executed with execvp.
+
+Shell Scripts Without Executable Permissions: If a shell script does not have executable permissions set (i.e., not marked as executable with chmod +x), execvp will fail.
+
+Commands Requiring a Shell Context: Commands that depend on shell features (redirection <, >) cannot be directly executed. You would need to invoke a shell to handle these.
+
+Commands That Need Environment Setup: If a command requires specific environment variables or configurations that aren't set in the calling process, it may fail to execute correctly.
+
+Invalid or Nonexistent Executables: If the specified executable is not found in the PATH, or if the command is invalid (e.g., a typo), execvp will fail.
+
+Commands with Specific User Permissions: If the executable requires higher privileges than those available to the calling process (and isn't setuid), execvp will fail due to permission errors.
+
+Utkarsh Garg: multiple pipes, history, command execution
+Aditya Singh: multiple pipes, Background processes using &, command execution
+
+GitHub: https://github.com/UG570/Simple-Shell-OS-assignment-2
