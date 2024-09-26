@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <time.h>
 #include <stdbool.h>
+#include <signal.h>
+
 
 #define MAX_LINE 1024      // maximum length for input command
 #define MAX_ARGS 64        // maximum number of arguments for a command
@@ -206,6 +208,7 @@ void execute_piped_command(char *input) {
 
 // function to print command history
 void print_history() {
+	printf("\n");
     for (int i = 0; i < history_count; i++) {
         printf("%d: command: %s | PID: %d | start: %ld | duration: %ld seconds\n",
                i + 1,
@@ -216,7 +219,23 @@ void print_history() {
     }
 }
 
+void print_history_names() {
+    for (int i = 0; i < history_count; i++) {
+        printf("%d: %s \n",
+               i + 1,
+               history[i].command);
+    }
+}
+
+void handle_sigint(int sig) {
+    print_history();  // call function to print the history
+    exit(0);    // exit the program
+}
+
+
 int main() {
+
+    signal(SIGINT, handle_sigint);
     char input[MAX_LINE]; // buffer for user input
     char *args[MAX_ARGS]; // array to hold command arguments
 
@@ -233,7 +252,7 @@ int main() {
             // check for built-in commands
             if (strcmp(input, "history") == 0) {
                 add_to_history("history", -1, -1, 0, 0); // add history command to history
-                print_history(); // print command history
+                print_history_names(); // print command history
                 continue;
             }
 
